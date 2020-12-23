@@ -34,7 +34,8 @@ module Mollie
                   :canceled_at,
                   :completed_at,
                   :lines,
-                  :_links
+                  :_links,
+                  :_embedded
 
     alias links _links
 
@@ -138,6 +139,17 @@ module Mollie
       options[:order_id] = id
       options[:lines] ||= []
       Order::Refund.create(options)
+    end
+    
+    def pay!(options = {})
+      options[:order_id] = id
+      Order::Payment.create(options)
+    end
+    
+    def ship!(options = {})
+      options[:order_id] = id
+      options[:lines] ||= []
+      Order::Shipment.create(options)
     end
   end
 end
